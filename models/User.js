@@ -21,14 +21,14 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-      select: false,
+      select:false,
     },
     bio: {
       type: String,
     },
     avatar: {
-      publicId: String,
-      url: String,
+      type:String,
+      default:'https://res-console.cloudinary.com/dyqzaxyqw/thumbnails/v1/image/upload/v1693913386/YXZhdGFycy9wcm9maWxlaWNvbmRlZmF1bHRfZXJzaWFo/grid_landscape'
     },
     followers: [
       {
@@ -45,7 +45,7 @@ const userSchema = mongoose.Schema(
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "post",
+        ref: "posts",
       },
     ],
   },
