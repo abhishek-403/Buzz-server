@@ -18,10 +18,7 @@ const port = process.env.PORT || 4001;
 let origin = "exp://192.168.1.10:8081";
 
 app.use(
-  cors({
-    credentials: true,
-    // origin,
-  })
+  cors()
 );
 
 const mainRouter = require("./routes");

@@ -29,6 +29,27 @@ const postSchema = mongoose.Schema(
             ref:'comments'
         }
 
+    ],
+    views:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'users'
+        }
+
+    ],
+    shares:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'users'
+        }
+
+    ],
+    retweets:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'users'
+        }
+
     ]
   },
 

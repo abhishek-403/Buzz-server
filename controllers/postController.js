@@ -65,7 +65,7 @@ const likeController = async (req, res) => {
     await post.save();
     return res.send(success(200, { post: mapPost(post, req._id) }));
   } catch (e) {
-    return res.send(error(500, e.message));
+    return ;
   }
 };
 module.exports = {
