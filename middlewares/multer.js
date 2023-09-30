@@ -15,8 +15,18 @@ const storage = new CloudinaryStorage({
     allowed_formats: ["jpg", "png", "jpeg"], // Allowed image formats
   },
 });
+const storageforavatar = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "Profilepics", // Optional: set a folder name in your Cloudinary account
+    allowed_formats: ["jpg", "png", "jpeg"], // Allowed image formats
+  },
+});
 const upload = multer({
   storage,
+});
+const uploadforavatar = multer({
+  storageforavatar,
 });
 
 module.exports = upload;

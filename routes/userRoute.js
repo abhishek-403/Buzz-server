@@ -1,11 +1,15 @@
-const router = require('express').Router();
-const userController = require('../controllers/userController');
+const router = require("express").Router();
+const userController = require("../controllers/userController");
+const upload = require("../middlewares/multer");
 
-
-
-router.get('/getmyprofile', userController.getMyProfile)
-router.get('/getmyfeed', userController.getMyFeedController)
-router.get('/getmyposts', userController.getMyPostsController)
+router.get("/getmyprofile", userController.getMyProfile);
+router.get("/getmyfeed", userController.getMyFeedController);
+router.get("/getmyposts", userController.getMyPostsController);
+router.post(
+  "/editprofile",
+  upload.single("avatar"),
+  userController.editMyProfile
+);
 
 // router.post('/follow', requireUser, userController.followController)
 // router.get('/getfeeddata', requireUser, userController.getFeedData)
@@ -20,4 +24,4 @@ router.get('/getmyposts', userController.getMyPostsController)
 
 // router.delete('/deleteprofile', requireUser, userController.deleteMyProfile)
 
-module.exports = router
+module.exports = router;
