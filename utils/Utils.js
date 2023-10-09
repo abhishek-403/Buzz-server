@@ -20,7 +20,7 @@ const mapPost = (post, userId) => {
     timeAgo: ta.ago(post.createdAt),
   };
 };
-const myPostsMap = (post, user) => {
+const mapMyPosts = (post, user) => {
   return {
     _id: post.id,
     message: post.message,
@@ -40,8 +40,29 @@ const myPostsMap = (post, user) => {
     timeAgo: ta.ago(post.createdAt),
   };
 };
+const mapUsersPosts = (post, user,_id) => {
+  return {
+    _id: post.id,
+    message: post.message,
+    images: post.images,
+    owner: {
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      avatar: user.avatar,
+    },
+    likesCount: post.likes.length,
+    commentsCount: 0,
+    viewsCount: 0,
+    sharesCount: 0,
+    retweetsCount: 0,
+    isLiked: post.likes.includes(_id),
+    timeAgo: ta.ago(post.createdAt),
+  };
+};
 
 module.exports = {
   mapPost,
-  myPostsMap,
+  mapMyPosts,
+  mapUsersPosts
 };

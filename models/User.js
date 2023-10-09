@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type:String,
-      default:'https://res-console.cloudinary.com/dyqzaxyqw/thumbnails/v1/image/upload/v1693913386/YXZhdGFycy9wcm9maWxlaWNvbmRlZmF1bHRfZXJzaWFo/grid_landscape'
+      default:"https://res.cloudinary.com/dyqzaxyqw/image/upload/f_auto,q_auto/v1/avatars/profileicondefault_ersiah"
     },
     followers: [
       {

@@ -9,6 +9,6 @@ const searchRoute = require("./searchRoute");
 router.use("/auth", authRoute);
 router.use("/post", requireUser, postRoute);
 router.use("/user", requireUser, userRoute);
-router.use("/search", searchRoute);
+router.use("/search", requireUser,searchRoute);
 
 module.exports = router;
