@@ -41,11 +41,11 @@ const editMyProfile = async (req, res) => {
 };
 const getMyFeedController = async (req, res) => {
   try {
-    // let data = await Posts.find().populate("owner");
+    let data = await Posts.find().sort({ _id: -1 }).populate("owner");
 
-    const { page, pageSize } = req.body;
-    const skip = (page - 1) * pageSize;
-    const data = await Posts.find().populate("owner").sort({ _id: -1 }).skip(skip).limit(Number(pageSize));
+    // const { page, pageSize } = req.body;
+    // const skip = (page - 1) * pageSize;
+    // const data = await Posts.find().populate("owner").sort({ _id: -1 }).skip(skip).limit(Number(pageSize));
 
     let newData = (data.map((item) => mapPost(item, req._id)))
 

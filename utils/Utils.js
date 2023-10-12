@@ -10,6 +10,11 @@ const mapPost = (post, userId) => {
       name: post.owner.name,
       username: post.owner.username,
       avatar: post.owner.avatar,
+      email:post.owner.email,
+      postsCount:post.owner.posts.length,
+      followersCount:post.owner.followers.length,
+      followingsCount:post.owner.followings.length,
+      bio:post.owner.bio
     },
     likesCount: post.likes.length,
     commentsCount: 0,
