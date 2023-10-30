@@ -4,8 +4,9 @@ const upload = require("../middlewares/multer");
 
 router.get("/getmyprofile", userController.getMyProfile);
 router.post("/getmyfeed", userController.getMyFeedController);
-router.get("/getmyposts", userController.getMyPostsController);
+router.post("/getmyposts", userController.getMyPostsController);
 router.post("/getUsersPosts", userController.getUsersPostsController);
+router.post("/followUser", userController.followController);
 router.post(
   "/editprofile",
   upload.single("avatar"),

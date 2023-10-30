@@ -41,13 +41,17 @@ const editMyProfile = async (req, res) => {
 };
 const getMyFeedController = async (req, res) => {
   try {
-    let data = await Posts.find().sort({ _id: -1 }).populate("owner");
+    // let data = await Posts.find().sort({ _id: -1 }).populate("owner");
 
-    // const { page, pageSize } = req.body;
-    // const skip = (page - 1) * pageSize;
-    // const data = await Posts.find().populate("owner").sort({ _id: -1 }).skip(skip).limit(Number(pageSize));
+    const { page, pageSize } = req.body;
+    const skip = (page - 1) * pageSize;
+    const data = await Posts.find()
+      .populate("owner")
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(pageSize));
 
-    let newData = (data.map((item) => mapPost(item, req._id)))
+    let newData = data.map((item) => mapPost(item, req._id));
 
     return res.send(success(200, { newData }));
   } catch (e) {
@@ -57,34 +61,90 @@ const getMyFeedController = async (req, res) => {
 
 const getMyPostsController = async (req, res) => {
   try {
-    const user = await User.findById(req._id).populate("posts");
+    const { page, pageSize } = req.body;
+    const user = await User.findById(req._id).populate({
+      path: "posts",
+      options: {
+        skip: (page - 1) * pageSize,
+        limit: pageSize,
+      },
+    });
+
+    // const user = await User.findById(req._id).populate("posts");
+    // const posts = user.posts.map((item) => mapMyPosts(item, user));
 
     const posts = user.posts.map((item) => mapMyPosts(item, user));
 
-    return res.send(success(200, { posts }));
+    return res.send(success(200, { posts: posts.reverse() }));
   } catch (e) {
     return res.send(error(500, e.message));
   }
 };
 
-
-const getUsersPostsController =async(req,res)=>{
+const getUsersPostsController = async (req, res) => {
   try {
-    const _id= req._id;
-    const {userId}= req.body;
-    const user = await User.findById(userId).populate('posts');
-    const posts = user.posts.map((item)=>mapUsersPosts(item,user,_id))
+    // const _id= req._id;
+    // const {userId}= req.body;
+    // const user = await User.findById(userId).populate('posts');
+    // const posts = user.posts.map((item)=>mapUsersPosts(item,user,_id))
 
-    return res.send(success(200,{posts}))
+    const { page, pageSize, userId } = req.body;
+    const user = await User.findById(userId).populate({
+      path: "posts",
+      options: {
+        skip: (page - 1) * pageSize,
+        limit: pageSize,
+      },
+    });
+    const posts = user.posts.map((item) => mapMyPosts(item, user));
+
+    return res.send(success(200, { posts: posts.reverse() }));
   } catch (e) {
-    
     return res.send(error(500, e.message));
   }
-}
+};
+
+const followController = async (req, res) => {
+  try {
+    const currUserId = req._id;
+    const { userIdToFollow } = req.body;
+    if (!userIdToFollow) {
+      return res.send(error(403, "User to follow required"));
+    }
+    if (currUserId === userIdToFollow) {
+      return res.send(error(403, "Cannot follow ourselves"));
+    }
+
+    const userToFollow = await User.findById(userIdToFollow);
+    const currUser = await User.findById(currUserId);
+
+    if (currUser.followings.includes(userIdToFollow)) {
+      const index = currUser.followings.indexOf(userIdToFollow);
+      const index2 = userToFollow.followers.indexOf(currUserId);
+
+      currUser.followings.splice(index, 1);
+      userToFollow.followers.splice(index2, 1);
+      await userToFollow.save();
+      await currUser.save();
+      return res.send(success(200, "Unfollowed!"));
+    } else {
+      userToFollow.followers.push(currUserId);
+      currUser.followings.push(userIdToFollow);
+
+      await userToFollow.save();
+      await currUser.save();
+      return res.send(success(200, "Followed!"));
+    }
+  } catch (e) {
+    return res.send(error(500, e.message));
+  }
+};
+
 module.exports = {
   getMyProfile,
   getMyFeedController,
   getMyPostsController,
   editMyProfile,
-  getUsersPostsController
+  getUsersPostsController,
+  followController,
 };
