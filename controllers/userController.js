@@ -42,7 +42,7 @@ const editMyProfile = async (req, res) => {
 const getMyFeedController = async (req, res) => {
   try {
     // let data = await Posts.find().sort({ _id: -1 }).populate("owner");
-
+    const me = await User.findById(req._id);
     const { page, pageSize } = req.body;
     const skip = (page - 1) * pageSize;
     const data = await Posts.find()
@@ -51,7 +51,16 @@ const getMyFeedController = async (req, res) => {
       .skip(skip)
       .limit(Number(pageSize));
 
-    let newData = data.map((item) => mapPost(item, req._id));
+    const updatedData = data.map((d) => {
+      if (me.followings.includes(d.owner._id)) {
+        const newD = Object.assign(d, { isFollowingOwner: true });
+        return newD;
+      } else {
+        const newD = Object.assign(d, { isFollowingOwner: false });
+        return newD;
+      }
+    });
+    let newData = updatedData.map((item) => mapPost(item, req._id));
 
     return res.send(success(200, { newData }));
   } catch (e) {

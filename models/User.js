@@ -48,6 +48,12 @@ const userSchema = mongoose.Schema(
         ref: "posts",
       },
     ],
+    hives: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "hives",
+      },
+    ],
   },
 
   {
