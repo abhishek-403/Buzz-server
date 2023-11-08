@@ -25,7 +25,7 @@ const requireUser = async (req, res, next) => {
 
     next();
   } catch (e) {
-    console.log(e);
+   
     return res.send(error(401, "Invalid access key."));
   }
 };

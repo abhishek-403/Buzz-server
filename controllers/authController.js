@@ -136,7 +136,7 @@ const resetPasswordController = async (req, res) => {
     }
 
     const user = await User.findOne({ email }).select("+password");
-    console.log(user);
+  
     const hashedPassword = await bcrypt.hash(password, 10);
 
     user.password = hashedPassword;

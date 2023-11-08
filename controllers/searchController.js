@@ -8,6 +8,10 @@ const searchUsersController = async (req, res) => {
     
 
     const data = user.map((item) => {
+      let isFollowingOwner=false;
+      if(item.followers.includes(req._id)){
+        isFollowingOwner=true;
+      }
       return {
         _id: item._id,
         avatar: item.avatar,
@@ -18,9 +22,12 @@ const searchUsersController = async (req, res) => {
         postsCount: item.posts.length,
         followersCount: item.followers.length,
         followingsCount: item.followings.length,
+        isMe:req._id===item._id,
+        isFollowingOwner
       };
     });
 
+    
     return res.send(success(200, { data }));
   } catch (e) {
     // return res.send(error(500, e.message));

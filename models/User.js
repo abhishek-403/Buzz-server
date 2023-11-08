@@ -54,6 +54,12 @@ const userSchema = mongoose.Schema(
         ref: "hives",
       },
     ],
+    joinedHives: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "hives",
+      },
+    ],
   },
 
   {

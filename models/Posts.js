@@ -50,6 +50,12 @@ const postSchema = mongoose.Schema(
             ref:'users'
         }
 
+    ],
+    joinedHives:[
+      {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'hives'
+    }
     ]
   },
 

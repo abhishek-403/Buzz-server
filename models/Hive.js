@@ -30,6 +30,12 @@ const hiveSchema = mongoose.Schema(
         ref: "users",
       },
     ],
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "posts",
+      },
+    ],
   },
 
   {
