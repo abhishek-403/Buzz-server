@@ -8,20 +8,30 @@ function getCustomRelativeTimestamp(creationTime) {
   const diff = now.diff(timestamp);
 
   if (diff >= 365 * 24 * 60 * 60 * 1000) {
-    return `${Math.floor(diff / (365 * 24 * 60 * 60 * 1000))}y`;
+    const years = Math.floor(diff / (365 * 24 * 60 * 60 * 1000));
+    return `${years}y`;
   } else if (diff >= 30 * 24 * 60 * 60 * 1000) {
-    return `${Math.floor(diff / (30 * 24 * 60 * 60 * 1000))}m`;
+    const months = Math.floor(diff / (30 * 24 * 60 * 60 * 1000));
+    return `${months}mon`;
   } else if (diff >= 7 * 24 * 60 * 60 * 1000) {
-    return `${Math.floor(diff / (7 * 24 * 60 * 60 * 1000))}w`;
+    const weeks = Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+    return `${weeks}w`;
+  } else if (diff >= 24 * 60 * 60 * 1000) {
+    const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+    return `${days}d`;
   } else if (diff >= 60 * 60 * 1000) {
-    return `${Math.floor(diff / (60 * 60 * 1000))}h`;
+    const hours = Math.floor(diff / (60 * 60 * 1000));
+    return `${hours}h`;
   } else if (diff >= 60 * 1000) {
-    return `${Math.floor(diff / (60 * 1000))}min`;
+    const minutes = Math.floor(diff / (60 * 1000));
+    return `${minutes}min`;
   } else if (diff >= 1000) {
-    return `${Math.floor(diff / 1000)}sec`;
+    const seconds = Math.floor(diff / 1000);
+    return `${seconds}sec`;
   } else {
     return "Just now";
   }
+  
 }
 const mapPost = (post, userId) => {
   return {
@@ -68,7 +78,7 @@ const mapMyPosts = (post, user) => {
     sharesCount: 0,
     retweetsCount: 0,
     isLiked: post.likes.includes(user._id),
-
+    isMyPost:true,
     timeAgo: getCustomRelativeTimestamp(post.createdAt),
   };
 };
@@ -90,7 +100,7 @@ const mapUsersPosts = (post, user, _id) => {
     retweetsCount: 0,
     isLiked: post.likes.includes(_id),
     // isFollowed: post.followers.includes(_id),
-
+    isMyPost:false,
     timeAgo: getCustomRelativeTimestamp(post.createdAt),
   };
 };

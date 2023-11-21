@@ -9,26 +9,41 @@ app.use(bodyParser.json());
 app.use(express.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const cloudinary = require("cloudinary").v2;
+
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
 const port = process.env.PORT || 4001;
-let origin = "exp://192.168.1.10:8081";
 
-app.use(
-  cors()
-);
 
-const mainRouter = require("./routes");
+app.use(cors());
+const http = require('http');
+const socketIO = require('socket.io');
 
-app.use("/api", mainRouter);
+const server = http.createServer(app);
+const io = socketIO(server);
 
-app.get("/hi", (req, res) => {
-  return res.send({ message: "Hi route hit!" });
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  
+  
+
+ 
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
 });
 
-app.listen(port, () => {
+app.io = io;
+const mainRouter = require("./routes");
+app.use("/api", mainRouter);
+
+server.listen(port, () => {
   console.log("Listening at", port);
 });

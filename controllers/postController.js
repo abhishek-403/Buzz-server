@@ -6,6 +6,7 @@ const { success, error } = require("../utils/responseWrapper");
 const createPostController = async (req, res) => {
   try {
     const owner = await User.findById(req._id);
+    const io = req.app.io;
     let imageUrl;
     if (req.file.path) {
       imageUrl = req.file.path;
@@ -20,6 +21,10 @@ const createPostController = async (req, res) => {
       ],
       owner,
     });
+
+    
+    io.emit('newTweet',post)
+
     owner.posts.push(post._id);
     await owner.save();
 
@@ -37,6 +42,11 @@ const createTextPostController = async (req, res) => {
       message,
       owner,
     });
+
+    const io = req.app.io;
+   
+    io.emit('newTweet',post)
+
     owner.posts.push(post._id);
     await owner.save();
 
@@ -65,9 +75,10 @@ const likeController = async (req, res) => {
     await post.save();
     return res.send(success(200, { post: mapPost(post, req._id) }));
   } catch (e) {
-    return ;
+    return res.send(error(500, e.message));
   }
 };
+
 module.exports = {
   createPostController,
   createTextPostController,
