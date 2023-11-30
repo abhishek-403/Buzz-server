@@ -67,6 +67,26 @@ const getMyFeedController = async (req, res) => {
     return res.send(error(500, e.message));
   }
 };
+const getMyAllFeedController = async (req, res) => {
+  try {
+    let data = await Posts.find().sort({ _id: -1 }).populate("owner");
+    const me = await User.findById(req._id);
+    const updatedData = data.map((d) => {
+      if (me.followings.includes(d.owner._id)) {
+        const newD = Object.assign(d, { isFollowingOwner: true });
+        return newD;
+      } else {
+        const newD = Object.assign(d, { isFollowingOwner: false });
+        return newD;
+      }
+    });
+    let newData = updatedData.map((item) => mapPost(item, req._id));
+
+    return res.send(success(200, { newData }));
+  } catch (e) {
+    return res.send(error(500, e.message));
+  }
+};
 
 const getMyPostsController = async (req, res) => {
   try {
@@ -74,6 +94,7 @@ const getMyPostsController = async (req, res) => {
     const user = await User.findById(req._id).populate({
       path: "posts",
       options: {
+         sort: { createdAt: 'desc' } ,
         skip: (page - 1) * pageSize,
         limit: pageSize,
       },
@@ -84,7 +105,7 @@ const getMyPostsController = async (req, res) => {
 
     const posts = user.posts.map((item) => mapMyPosts(item, user));
 
-    return res.send(success(200, { posts: posts.reverse() }));
+    return res.send(success(200, { posts: posts }));
   } catch (e) {
     return res.send(error(500, e.message));
   }
@@ -92,22 +113,20 @@ const getMyPostsController = async (req, res) => {
 
 const getUsersPostsController = async (req, res) => {
   try {
-    // const _id= req._id;
-    // const {userId}= req.body;
-    // const user = await User.findById(userId).populate('posts');
-    // const posts = user.posts.map((item)=>mapUsersPosts(item,user,_id))
 
     const { page, pageSize, userId } = req.body;
     const user = await User.findById(userId).populate({
       path: "posts",
       options: {
+        
+       sort: { createdAt: 'desc' } ,
         skip: (page - 1) * pageSize,
         limit: pageSize,
       },
     });
-    const posts = user.posts.map((item) => mapMyPosts(item, user));
+    const posts = user.posts.map((item) => mapUsersPosts(item, user));
 
-    return res.send(success(200, { posts: posts.reverse() }));
+    return res.send(success(200, { posts: posts }));
   } catch (e) {
     return res.send(error(500, e.message));
   }
@@ -156,4 +175,5 @@ module.exports = {
   editMyProfile,
   getUsersPostsController,
   followController,
+  getMyAllFeedController
 };

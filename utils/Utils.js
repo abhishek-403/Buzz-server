@@ -31,7 +31,6 @@ function getCustomRelativeTimestamp(creationTime) {
   } else {
     return "Just now";
   }
-  
 }
 const mapPost = (post, userId) => {
   return {
@@ -50,13 +49,13 @@ const mapPost = (post, userId) => {
       bio: post.owner.bio,
     },
     likesCount: post.likes.length,
-    commentsCount: 0,
+    commentsCount: post.comments.length,
     viewsCount: 0,
     sharesCount: 0,
     retweetsCount: 0,
     isLiked: post.likes.includes(userId),
     isFollowingOwner: post.isFollowingOwner,
-    isMyPost:userId==post.owner._id,
+    isMyPost: userId == post.owner._id,
 
     timeAgo: getCustomRelativeTimestamp(post.createdAt),
   };
@@ -73,12 +72,12 @@ const mapMyPosts = (post, user) => {
       avatar: user.avatar,
     },
     likesCount: post.likes.length,
-    commentsCount: 0,
+    commentsCount: post.comments.length,
     viewsCount: 0,
     sharesCount: 0,
     retweetsCount: 0,
     isLiked: post.likes.includes(user._id),
-    isMyPost:true,
+    isMyPost: true,
     timeAgo: getCustomRelativeTimestamp(post.createdAt),
   };
 };
@@ -92,16 +91,45 @@ const mapUsersPosts = (post, user, _id) => {
       name: user.name,
       username: user.username,
       avatar: user.avatar,
+     
+      email: user.email,
+      postsCount: user.posts.length,
+      followersCount: user.followers.length,
+      followingsCount: user.followings.length,
+      bio: user.bio,
     },
     likesCount: post.likes.length,
-    commentsCount: 0,
+    commentsCount: post.comments.length,
     viewsCount: 0,
     sharesCount: 0,
     retweetsCount: 0,
     isLiked: post.likes.includes(_id),
-    // isFollowed: post.followers.includes(_id),
-    isMyPost:false,
+    isMyPost: false,
     timeAgo: getCustomRelativeTimestamp(post.createdAt),
+  };
+};
+
+const mapComments = (comment,myId) => {
+  console.log(comment);
+  return {
+    _id: comment._id,
+    parentPost: comment.parentPost,
+    message: comment.message,
+    likes: comment.likes.length,
+    isMyComment:myId==comment.owner._id,
+    timeAgo: getCustomRelativeTimestamp(comment.createdAt),
+    owner: {
+      _id: comment.owner._id,
+      name: comment.owner.name,
+      username: comment.owner.username,
+      email: comment.owner.email,
+      avatar: comment.owner.avatar,
+      postsCount: comment.owner.posts.length,
+      followersCount: comment.owner.followers.length,
+      followingsCount: comment.owner.followings.length,
+      bio: comment.owner.bio,
+      isFollowingOwner: comment.isFollowingOwner,
+    },
   };
 };
 
@@ -109,4 +137,5 @@ module.exports = {
   mapPost,
   mapMyPosts,
   mapUsersPosts,
+  mapComments,
 };
