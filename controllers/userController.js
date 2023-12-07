@@ -26,7 +26,6 @@ const editMyProfile = async (req, res) => {
     if (bio) {
       user.bio = bio;
     }
-    console.log("pic", req.file.path);
     if (req.file.path) {
       user.avatar = req.file.path;
     }

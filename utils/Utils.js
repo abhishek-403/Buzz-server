@@ -110,7 +110,7 @@ const mapUsersPosts = (post, user, _id) => {
 };
 
 const mapComments = (comment,myId) => {
-  console.log(comment);
+
   return {
     _id: comment._id,
     parentPost: comment.parentPost,

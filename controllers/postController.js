@@ -151,8 +151,6 @@ const getAllComments = async (req, res) => {
       return res.send(error(404, "Post not found"));
     }
     const updatedData = allcomments.comments.map((d) => {
-      console.log(d.owner._id);
-      console.log(me.followings.includes(d.owner._id));
       if (me.followings.includes(d.owner._id)) {
         const newD = Object.assign(d, { isFollowingOwner: true });
         return newD;
