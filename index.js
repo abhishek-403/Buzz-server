@@ -21,29 +21,29 @@ const port = process.env.PORT || 4001;
 
 
 app.use(cors());
-const http = require('http');
-const socketIO = require('socket.io');
+// const http = require('http');
+// const socketIO = require('socket.io');
 
-const server = http.createServer(app);
-const io = socketIO(server);
+// const server = http.createServer(app);
+// const io = socketIO(server);
 
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
+// io.on('connection', (socket) => {
+//   console.log('A user connected');
 
   
   
 
  
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected');
+//   });
+// });
 
-app.io = io;
+// app.io = io;
 const mainRouter = require("./routes");
 app.use("/api", mainRouter);
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log("Listening at", port);
 });
