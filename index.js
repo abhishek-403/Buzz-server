@@ -43,6 +43,9 @@ app.use(cors());
 // app.io = io;
 const mainRouter = require("./routes");
 app.use("/api", mainRouter);
+app.get("/",(req,res)=>{
+  return res.send("api called")
+});
 
 app.listen(port, () => {
   console.log("Listening at", port);
