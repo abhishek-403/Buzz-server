@@ -119,8 +119,8 @@ const getUsersPostsController = async (req, res) => {
       options: {
         
        sort: { createdAt: 'desc' } ,
-        skip: (page - 1) * pageSize,
-        limit: pageSize,
+        // skip: (page - 1) * pageSize,
+        // limit: pageSize,
       },
     });
     const posts = user.posts.map((item) => mapUsersPosts(item, user));
