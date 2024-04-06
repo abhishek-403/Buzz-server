@@ -9,6 +9,7 @@ router.post("/like", postController.likeController);
 router.post("/comment", postController.commentOnPost);
 router.post("/deletecomment", postController.deleteComment);
 router.post("/getallcomments", postController.getAllComments);
+router.post("/delete", postController.deletePost);
 // router.put("/updatePost", postController.updatePostController);
 // router.delete("/deletePost", postController.deletePostController);
 

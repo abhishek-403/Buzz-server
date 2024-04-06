@@ -110,12 +110,12 @@ const deleteComment = async (req, res) => {
     const me = await User.findById(myId);
     const post = await Posts.findById(postId);
 
-    if(!postId || !commentId){
-      return res.send(error(403,"required fields not provided"))
+    if (!postId || !commentId) {
+      return res.send(error(403, "required fields not provided"));
     }
     const comment = await Comments.findById(commentId);
-    if(comment.owner!=myId){
-      return res.send(error(403,"can't delete other's comment"))
+    if (comment.owner != myId) {
+      return res.send(error(403, "can't delete other's comment"));
     }
 
     if (!post.comments.includes(commentId)) {
@@ -127,7 +127,7 @@ const deleteComment = async (req, res) => {
 
     await post.save();
     await comment.deleteOne();
-    return res.send(success(200,"deleted comment"));
+    return res.send(success(200, "deleted comment"));
   } catch (e) {
     return res.send(error(500, e.message));
   }
@@ -167,6 +167,33 @@ const getAllComments = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    console.log("hi");
+    const { postId } = req.body;
+    const myId = req._id;
+    const me = await User.findById(myId);
+    const targetPost = await Posts.findById(postId).populate("comments");
+    if(!targetPost){
+      return res.send(error(404,"Post not found"))
+    }
+    if (targetPost.owner != myId) {
+      return res.send(error(401, "Not your post"));
+    }
+    const index = me.posts.indexOf(postId);
+    me.posts.splice(index, 1);
+
+    await Posts.deleteOne({_id:postId});
+    console.log(targetPost);
+    console.log(myId);
+    await Comments.deleteMany({ parentPost: postId });
+ 
+    await me.save();
+    return res.send(success(200, { me }));
+  } catch (e) {
+    return res.send(error(500, e.message));
+  }
+};
 module.exports = {
   createPostController,
   createTextPostController,
@@ -174,4 +201,5 @@ module.exports = {
   commentOnPost,
   getAllComments,
   deleteComment,
+  deletePost,
 };

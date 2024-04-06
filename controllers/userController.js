@@ -89,15 +89,22 @@ const getMyAllFeedController = async (req, res) => {
 
 const getMyPostsController = async (req, res) => {
   try {
-    const { page, pageSize } = req.body;
+    // const { page, pageSize } = req.body;
     const user = await User.findById(req._id).populate({
       path: "posts",
       options: {
          sort: { createdAt: 'desc' } ,
-        skip: (page - 1) * pageSize,
-        limit: pageSize,
+     
       },
     });
+    // const user = await User.findById(req._id).populate({
+    //   path: "posts",
+    //   options: {
+    //      sort: { createdAt: 'desc' } ,
+    //     skip: (page - 1) * pageSize,
+    //     limit: pageSize,
+    //   },
+    // });
 
     // const user = await User.findById(req._id).populate("posts");
     // const posts = user.posts.map((item) => mapMyPosts(item, user));
